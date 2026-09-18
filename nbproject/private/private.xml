@@ -3,16 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Informatica/Desktop/b3-2023394/prestamos-y-creditos-sage/src/main/java/org/sage/prestamos/creditos/dto/response/RolResponse.java</file>
-            <file>file:/C:/Users/Informatica/Desktop/b3-2023394/prestamos-y-creditos-sage/src/main/java/org/sage/prestamos/creditos/dto/response/UsuarioResponse.java</file>
-            <file>file:/C:/Users/Informatica/Desktop/b3-2023394/prestamos-y-creditos-sage/src/main/java/org/sage/prestamos/creditos/dto/request/UsuarioRequest.java</file>
-            <file>file:/C:/Users/Informatica/Desktop/b3-2023394/prestamos-y-creditos-sage/src/main/java/org/sage/prestamos/creditos/dto/request/RolRequest.java</file>
-            <file>file:/C:/Users/Informatica/Documents/NetBeansProjects/prestamos-y-creditos-sage/src/main/java/org/sage/prestamos/creditos/Main.java</file>
-            <file>file:/C:/Users/gabpa/OneDrive/Documentos/NetBeansProjects/proyecto%20final/prestamos-y-creditos-sage/src/main/java/org/sage/prestamos/creditos/Main.java</file>
-            <file>file:/C:/Users/gabpa/OneDrive/Documentos/NetBeansProjects/proyecto%20final/prestamos-y-creditos-sage/src/main/java/org/sage/prestamos/creditos/controller/LoginController.java</file>
-            <file>file:/C:/Users/gabpa/OneDrive/Documentos/NetBeansProjects/proyecto%20final/prestamos-y-creditos-sage/src/resources/view/login-view.fxml</file>
-            <file>file:/C:/Users/gabpa/OneDrive/Documentos/NetBeansProjects/proyecto%20final/prestamos-y-creditos-sage/src/resources/css/login-view.css</file>
-            <file>file:/C:/Users/gabpa/OneDrive/Documentos/NetBeansProjects/proyecto%20final/prestamos-y-creditos-sage/src/main/java/org/sage/prestamos/creditos/repository/UsuariosRepository.java</file>
+            <file>file:/C:/Users/andre/OneDrive/Documentos/kinal-proyects/prestamos-y-creditos-sage/src/main/java/org/sage/prestamos/creditos/controller/LoginController.java</file>
+            <file>file:/C:/Users/andre/OneDrive/Documentos/kinal-proyects/prestamos-y-creditos-sage/.gitignore</file>
+            <file>file:/C:/Users/andre/OneDrive/Documentos/kinal-proyects/prestamos-y-creditos-sage/src/main/java/org/sage/prestamos/creditos/repository/UsuariosRepository.java</file>
+            <file>file:/C:/Users/andre/OneDrive/Documentos/kinal-proyects/prestamos-y-creditos-sage/src/main/java/org/sage/prestamos/creditos/dto/request/UsuarioRequest.java</file>
         </group>
     </open-files>
 </project-private>
