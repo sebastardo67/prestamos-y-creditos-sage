@@ -1,6 +1,7 @@
 # Compilados y binarios generados
 /build/
 /dist/
+<<<<<<< Updated upstream
 
 # Archivos privados y de usuario de NetBeans
 nbproject/private/
@@ -10,3 +11,12 @@ nbproject/private/
 Thumbs.db
 
  
+=======
+ 
+# Archivos privados y de usuario de NetBeans
+nbproject/private/
+ 
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+>>>>>>> Stashed changes
