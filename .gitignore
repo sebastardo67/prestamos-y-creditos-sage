@@ -1,1 +1,12 @@
+# Compilados y binarios generados
 /build/
+/dist/
+
+# Archivos privados y de usuario de NetBeans
+nbproject/private/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+ 
