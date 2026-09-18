@@ -12,7 +12,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.fxml.Initializable;
 
 /**
  * FXML Controller class
@@ -48,13 +47,4 @@ public class LoginController implements Initializable {
 
         lblMensaje.setText("Datos ingresados correctamente.");
     }
-}
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
 }

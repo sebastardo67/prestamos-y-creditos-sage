@@ -6,7 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Optional;
+import main.java.org.sage.prestamos.creditos.config.ConnectionDb;
+import main.java.org.sage.prestamos.creditos.dto.request.UsuarioRequest;
 import main.java.org.sage.prestamos.creditos.model.Usuarios;
+import main.java.org.sage.prestamos.creditos.security.jdbcrypt.BCrypt;
 
 public class UsuariosRepository {
 
@@ -52,5 +55,27 @@ public class UsuariosRepository {
         }
 
         return Optional.empty();
+    }
+    public boolean guardarUsuario(UsuarioRequest request) {
+        String sql = "INSERT INTO usuarios (nombre, apellido, email, contrasena_hash, id_rol) VALUES (?, ?, ?, ?, ?)";
+        
+        // Encriptar la contraseña antes de guardar
+        String hashPassword = BCrypt.hashpw(request.getPassword(), BCrypt.gensalt());
+
+        try (Connection conn = ConnectionDb.getconnectionDataBase();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, request.getNombre());
+            ps.setString(2, request.getApellido());
+            ps.setString(3, request.getEmail());
+            ps.setString(4, hashPassword);
+            ps.setInt(5, request.getIdRol());
+
+            return ps.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
