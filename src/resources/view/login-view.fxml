@@ -9,37 +9,108 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.org.sage.prestamos.creditos.controller.LoginController">
+<AnchorPane prefHeight="400.0"
+            prefWidth="600.0"
+            styleClass="mainFxmlClass"
+            xmlns="http://javafx.com/javafx/21.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="main.java.org.sage.prestamos.creditos.controller.LoginController">
+
     <stylesheets>
-        <URL value="@/resources/css/login-view.css" />
+        <URL value="@../css/login-view.css"/>
     </stylesheets>
-   <children>
-      <Pane prefHeight="400.0" prefWidth="600.0">
-         <children>
-            <VBox layoutX="159.0" layoutY="3.0" prefHeight="394.0" prefWidth="246.0" spacing="8.0">
-               <children>
-                  <Pane prefHeight="159.0" prefWidth="246.0">
-                     <children>
-                        <ImageView fitHeight="122.0" fitWidth="125.0" layoutX="62.0" layoutY="8.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/image-1.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </Pane>
-                  <Label text="Email" />
-                  <TextField fx:id="txtEmail" promptText="correo@ejemplo.com" />
-                  <Separator prefWidth="249.0" />
-                  <Label text="Contraseña" />
-                  <PasswordField fx:id="txtPassword" promptText="Ingresa tu contraseña" />
-                  <Button maxWidth="1.7976931348623157E308" onAction="#handleLogin" text="Iniciar Sesión" />
-                  <Label fx:id="lblMensaje" textFill="RED" wrapText="true" />
-               </children>
-            </VBox>
-         </children>
-      </Pane>
-   </children>
+
+    <children>
+
+        <Pane prefHeight="400.0"
+              prefWidth="600.0">
+
+            <children>
+
+                <VBox layoutX="159.0"
+                      layoutY="3.0"
+                      prefWidth="246.0"
+                      spacing="8.0">
+
+                    <children>
+
+                        <!-- LOGO -->
+                        <Pane prefHeight="159.0"
+                              prefWidth="246.0">
+
+                            <children>
+
+                                <ImageView fitHeight="122.0"
+                                           fitWidth="125.0"
+                                           layoutX="62.0"
+                                           layoutY="8.0"
+                                           pickOnBounds="true"
+                                           preserveRatio="true">
+
+                                    <image>
+                                        <Image url="@../images/image-1.png"/>
+                                    </image>
+
+                                </ImageView>
+
+                            </children>
+                        </Pane>
+
+                        <!-- EMAIL -->
+                        <Label text="Email"/>
+
+                        <TextField fx:id="txtEmail"
+                                   promptText="correo@ejemplo.com"/>
+
+                        <Separator prefWidth="249.0"/>
+
+                        <!-- CONTRASEÑA -->
+                        <Label text="Contraseña"/>
+
+                        <PasswordField fx:id="txtPassword"
+                                       promptText="Ingresa tu contraseña"/>
+
+                        <!-- MENSAJE -->
+                        <Label fx:id="lblMensaje"
+                               textFill="RED"
+                               wrapText="true"/>
+
+                        <!-- BOTONES -->
+                        <HBox alignment="CENTER"
+                              prefHeight="56.0"
+                              prefWidth="246.0"
+                              spacing="8.0">
+
+                            <children>
+
+                                <Button mnemonicParsing="false"
+                                        onAction="#handleLogin"
+                                        prefHeight="25.0"
+                                        prefWidth="124.0"
+                                        text="Iniciar Sesión"/>
+
+                                <Button mnemonicParsing="false"
+                                        onAction="#handleRegister"
+                                        prefHeight="25.0"
+                                        prefWidth="118.0"
+                                        text="Registrar Usuario"/>
+
+                            </children>
+
+                        </HBox>
+
+                    </children>
+
+                </VBox>
+
+            </children>
+
+        </Pane>
+
+    </children>
+
 </AnchorPane>
