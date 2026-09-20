@@ -10,8 +10,15 @@ public class UsuarioResponse {
     private int idRol;
     private boolean activo;
 
-    public UsuarioResponse(int idUsuario, String nombre, String apellido,
-            String username, String email, int idRol, boolean activo) {
+    public UsuarioResponse(
+            int idUsuario,
+            String nombre,
+            String apellido,
+            String username,
+            String email,
+            int idRol,
+            boolean activo
+    ) {
 
         this.idUsuario = idUsuario;
         this.nombre = nombre;

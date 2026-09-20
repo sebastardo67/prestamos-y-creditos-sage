@@ -2,7 +2,6 @@ package main.java.org.sage.prestamos.creditos.controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -17,11 +16,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import main.java.org.sage.prestamos.creditos.model.Usuarios;
-import main.java.org.sage.prestamos.creditos.repository.UsuariosRepository;
-import main.java.org.sage.prestamos.creditos.security.jdbcrypt.BCrypt;
+import main.java.org.sage.prestamos.creditos.dto.response.UsuarioResponse;
+import main.java.org.sage.prestamos.creditos.service.UsuarioService;
 
-public class LoginController implements Initializable {
+public class LoginController
+        implements Initializable {
 
     @FXML
     private TextField txtEmail;
@@ -32,150 +31,186 @@ public class LoginController implements Initializable {
     @FXML
     private Label lblMensaje;
 
-    private final UsuariosRepository usuariosRepository =
-            new UsuariosRepository();
+    private final UsuarioService usuarioService =
+            new UsuarioService();
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // Inicialización de la vista de Login
+    public void initialize(
+            URL url,
+            ResourceBundle resourceBundle
+    ) {
+
     }
 
-    /**
-     * Iniciar sesión.
-     */
     @FXML
-    private void handleLogin(ActionEvent event) {
+    private void handleLogin(
+            ActionEvent event
+    ) {
 
-        String email = txtEmail.getText().trim();
-        String password = txtPassword.getText();
+        lblMensaje.setText("");
 
-        // =========================
-        // VALIDAR CAMPOS
-        // =========================
+        String email =
+                txtEmail.getText();
 
-        if (email.isEmpty() || password.isEmpty()) {
-
-            lblMensaje.setText(
-                    "Por favor, ingrese correo y contraseña."
-            );
-
-            return;
-        }
-
-        // =========================
-        // BUSCAR USUARIO
-        // =========================
-
-        Optional<Usuarios> usuarioOpt =
-                usuariosRepository.buscarPorEmail(email);
-
-        if (usuarioOpt.isPresent()) {
-
-            Usuarios usuario = usuarioOpt.get();
-
-            // =========================
-            // VERIFICAR ESTADO
-            // =========================
-
-            if (!usuario.isActivo()) {
-
-                lblMensaje.setText(
-                        "El usuario se encuentra inactivo."
-                );
-
-                return;
-            }
-
-            // =========================
-            // VERIFICAR CONTRASEÑA
-            // =========================
-
-            if (BCrypt.checkpw(
-                    password,
-                    usuario.getPasswordHash())) {
-
-                lblMensaje.setText(
-                        "¡Inicio de sesión exitoso!"
-                );
-
-                abrirPantallaPrincipal(usuario);
-
-            } else {
-
-                lblMensaje.setText(
-                        "Contraseña incorrecta."
-                );
-            }
-
-        } else {
-
-            lblMensaje.setText(
-                    "El usuario no existe."
-            );
-        }
-    }
-
-    /**
-     * Abrir pantalla principal.
-     *
-     * Por ahora solamente muestra el usuario
-     * en la consola.
-     */
-    private void abrirPantallaPrincipal(Usuarios usuario) {
-
-        System.out.println(
-                "Bienvenido: "
-                + usuario.getNombre()
-                + " "
-                + usuario.getApellido()
-        );
-
-        /*
-         * Aquí posteriormente podemos cargar
-         * el dashboard/pantalla principal.
-         */
-    }
-
-    /**
-     * Abrir pantalla de Registro.
-     */
-    @FXML
-    private void handleRegister(ActionEvent event) {
+        String password =
+                txtPassword.getText();
 
         try {
 
-            URL url = getClass().getResource(
-                    "/view/register-view.fxml"
+            UsuarioResponse usuario =
+                    usuarioService.autenticar(
+                            email,
+                            password
+                    );
+
+            abrirDashboard(
+                    event,
+                    usuario
             );
+
+        } catch (IllegalArgumentException e) {
+
+            mostrarError(
+                    e.getMessage()
+            );
+
+        } catch (IllegalStateException e) {
+
+            mostrarError(
+                    e.getMessage()
+            );
+
+            e.printStackTrace();
+
+        } catch (Exception e) {
+
+            mostrarError(
+                    "Ocurrió un error inesperado."
+            );
+
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void handleRegister(
+            ActionEvent event
+    ) {
+
+        try {
+
+            URL url =
+                    getClass().getResource(
+                            "/resources/view/register-view.fxml"
+                    );
 
             if (url == null) {
 
                 throw new IOException(
-                        "No se encontró /view/register-view.fxml"
+                        "No se encontró register-view.fxml"
                 );
             }
 
-            FXMLLoader loader = new FXMLLoader(url);
+            FXMLLoader loader =
+                    new FXMLLoader(url);
 
-            Parent root = loader.load();
+            Parent root =
+                    loader.load();
 
-            Stage stage = (Stage)
-                    ((Node) event.getSource())
+            Stage stage =
+                    (Stage) ((Node)
+                            event.getSource())
                             .getScene()
                             .getWindow();
 
-            Scene scene = new Scene(root);
+            stage.setScene(
+                    new Scene(root)
+            );
 
-            stage.setScene(scene);
+            stage.setTitle(
+                    "Sistema de Préstamos - Registro"
+            );
+
             stage.show();
 
         } catch (IOException e) {
 
-            e.printStackTrace();
-
-            lblMensaje.setText(
+            mostrarError(
                     "No se pudo abrir la pantalla de registro."
             );
+
+            e.printStackTrace();
         }
+    }
+
+    private void abrirDashboard(
+            ActionEvent event,
+            UsuarioResponse usuario
+    ) {
+
+        try {
+
+            URL url =
+                    getClass().getResource(
+                            "/resources/view/dashboard-view.fxml"
+                    );
+
+            if (url == null) {
+
+                throw new IOException(
+                        "No se encontró dashboard-view.fxml"
+                );
+            }
+
+            FXMLLoader loader =
+                    new FXMLLoader(url);
+
+            Parent root =
+                    loader.load();
+
+            DashboardController controller =
+                    loader.getController();
+
+            controller.setUsuario(
+                    usuario
+            );
+
+            Stage stage =
+                    (Stage) ((Node)
+                            event.getSource())
+                            .getScene()
+                            .getWindow();
+
+            stage.setScene(
+                    new Scene(root)
+            );
+
+            stage.setTitle(
+                    "Sistema de Préstamos"
+            );
+
+            stage.show();
+
+        } catch (IOException e) {
+
+            mostrarError(
+                    "El usuario inició sesión, pero no se pudo abrir la pantalla principal."
+            );
+
+            e.printStackTrace();
+        }
+    }
+
+    private void mostrarError(
+            String mensaje
+    ) {
+
+        lblMensaje.setStyle(
+                "-fx-text-fill: red;"
+        );
+
+        lblMensaje.setText(
+                mensaje
+        );
     }
 }

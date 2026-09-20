@@ -1,4 +1,3 @@
-
 package main.java.org.sage.prestamos.creditos.dto.request;
 
 public class UsuarioRequest {
@@ -8,17 +7,20 @@ public class UsuarioRequest {
     private String username;
     private String email;
     private String password;
-    private int idRol;
 
-    public UsuarioRequest(String nombre, String apellido, String username,
-            String email, String password, int idRol) {
+    public UsuarioRequest(
+            String nombre,
+            String apellido,
+            String username,
+            String email,
+            String password
+    ) {
 
         this.nombre = nombre;
         this.apellido = apellido;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.idRol = idRol;
     }
 
     public String getNombre() {
@@ -59,13 +61,5 @@ public class UsuarioRequest {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public int getIdRol() {
-        return idRol;
-    }
-
-    public void setIdRol(int idRol) {
-        this.idRol = idRol;
     }
 }

@@ -31,10 +31,12 @@
 
             <children>
 
-                <VBox layoutX="159.0"
-                      layoutY="3.0"
-                      prefWidth="246.0"
-                      spacing="8.0">
+<VBox layoutX="145.0"
+      layoutY="20.0"
+      prefHeight="360.0"
+      prefWidth="310.0"
+      spacing="10.0"
+      styleClass="form-card">
 
                     <children>
 
@@ -87,17 +89,19 @@
 
                             <children>
 
-                                <Button mnemonicParsing="false"
-                                        onAction="#handleLogin"
-                                        prefHeight="25.0"
-                                        prefWidth="124.0"
-                                        text="Iniciar Sesión"/>
+<Button mnemonicParsing="false"
+        onAction="#handleLogin"
+        prefHeight="35.0"
+        prefWidth="124.0"
+        styleClass="primary-button"
+        text="Iniciar Sesión"/>
 
-                                <Button mnemonicParsing="false"
-                                        onAction="#handleRegister"
-                                        prefHeight="25.0"
-                                        prefWidth="118.0"
-                                        text="Registrar Usuario"/>
+<Button mnemonicParsing="false"
+        onAction="#handleRegister"
+        prefHeight="35.0"
+        prefWidth="118.0"
+        styleClass="secondary-button"
+        text="Registrar Usuario"/>
 
                             </children>
 

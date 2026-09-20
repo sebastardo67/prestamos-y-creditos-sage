@@ -2,12 +2,12 @@ package main.java.org.sage.prestamos.creditos.controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -16,11 +16,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-import main.java.org.sage.prestamos.creditos.model.Usuarios;
-import main.java.org.sage.prestamos.creditos.repository.UsuariosRepository;
-import main.java.org.sage.prestamos.creditos.security.jdbcrypt.BCrypt;
+import main.java.org.sage.prestamos.creditos.dto.request.UsuarioRequest;
+import main.java.org.sage.prestamos.creditos.service.UsuarioService;
 
-public class RegisterController implements javafx.fxml.Initializable {
+public class RegisterController
+        implements Initializable {
 
     @FXML
     private TextField txtNombre;
@@ -40,193 +40,118 @@ public class RegisterController implements javafx.fxml.Initializable {
     @FXML
     private Label lblMensaje;
 
-    private final UsuariosRepository usuariosRepository =
-            new UsuariosRepository();
+    private final UsuarioService usuarioService =
+            new UsuarioService();
 
     @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // Inicialización del formulario
+    public void initialize(
+            URL url,
+            ResourceBundle resourceBundle
+    ) {
+
     }
 
-    /**
-     * Registrar nuevo usuario.
-     */
     @FXML
-    private void handleRegister(ActionEvent event) {
+    private void handleRegister(
+            ActionEvent event
+    ) {
 
-        String nombre = txtNombre.getText().trim();
-        String apellido = txtApellido.getText().trim();
-        String username = txtUsername.getText().trim();
-        String email = txtEmail.getText().trim();
-        String password = txtPassword.getText();
+        limpiarMensaje();
 
-        // =========================
-        // VALIDAR CAMPOS
-        // =========================
+        UsuarioRequest request =
+                new UsuarioRequest(
+                        txtNombre.getText(),
+                        txtApellido.getText(),
+                        txtUsername.getText(),
+                        txtEmail.getText(),
+                        txtPassword.getText()
+                );
 
-        if (nombre.isEmpty()
-                || apellido.isEmpty()
-                || username.isEmpty()
-                || email.isEmpty()
-                || password.isEmpty()) {
+        try {
 
-            mostrarMensaje("Todos los campos son obligatorios.");
-            return;
-        }
+            usuarioService.registrar(request);
 
-        // =========================
-        // VALIDAR EMAIL
-        // =========================
-
-        if (!email.matches(
-                "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$")) {
-
-            mostrarMensaje("Ingrese un correo electrónico válido.");
-            return;
-        }
-
-        // =========================
-        // VALIDAR CONTRASEÑA
-        // =========================
-
-        if (password.length() < 6) {
-
-            mostrarMensaje(
-                    "La contraseña debe tener al menos 6 caracteres."
-            );
-
-            return;
-        }
-
-        // =========================
-        // VERIFICAR EMAIL
-        // =========================
-
-        if (usuariosRepository.buscarPorEmail(email).isPresent()) {
-
-            mostrarMensaje("El correo ya está registrado.");
-            return;
-        }
-
-        // =========================
-        // VERIFICAR USERNAME
-        // =========================
-
-        if (usuariosRepository.buscarPorUsername(username).isPresent()) {
-
-            mostrarMensaje(
-                    "El nombre de usuario ya está registrado."
-            );
-
-            return;
-        }
-
-        // =========================
-        // ENCRIPTAR CONTRASEÑA
-        // =========================
-
-        String passwordHash = BCrypt.hashpw(
-                password,
-                BCrypt.gensalt()
-        );
-
-        // =========================
-        // CREAR USUARIO
-        // =========================
-
-        Usuarios usuario = new Usuarios();
-
-        usuario.setNombre(nombre);
-        usuario.setApellido(apellido);
-        usuario.setUsername(username);
-        usuario.setEmail(email);
-        usuario.setPasswordHash(passwordHash);
-
-        /*
-         * ID DEL ROL
-         *
-         * 2 = usuario normal
-         *
-         * Verifica que en tu tabla de roles
-         * este ID corresponda al usuario normal.
-         */
-        usuario.setIdRol(2);
-
-        usuario.setActivo(true);
-
-        LocalDateTime ahora = LocalDateTime.now();
-
-        usuario.setFechaCreacion(ahora);
-        usuario.setFechaActualizacion(ahora);
-
-        // =========================
-        // GUARDAR EN BASE DE DATOS
-        // =========================
-
-        boolean registrado = usuariosRepository.guardar(usuario);
-
-        if (registrado) {
-
-            mostrarMensaje(
+            mostrarExito(
                     "¡Usuario registrado correctamente!"
             );
 
             limpiarCampos();
 
-        } else {
+        } catch (IllegalArgumentException e) {
 
-            mostrarMensaje(
-                    "No se pudo registrar el usuario."
+            mostrarError(
+                    e.getMessage()
             );
+
+        } catch (IllegalStateException e) {
+
+            mostrarError(
+                    e.getMessage()
+            );
+
+            e.printStackTrace();
+
+        } catch (Exception e) {
+
+            mostrarError(
+                    "Ocurrió un error inesperado."
+            );
+
+            e.printStackTrace();
         }
     }
 
-    /**
-     * Regresar a la pantalla de Login.
-     */
     @FXML
-    private void handleLogin(ActionEvent event) {
+    private void handleLogin(
+            ActionEvent event
+    ) {
 
         try {
 
-            URL url = getClass().getResource(
-                    "/view/login-view.fxml"
-            );
+            URL url =
+                    getClass().getResource(
+                            "/resources/view/login-view.fxml"
+                    );
 
             if (url == null) {
 
                 throw new IOException(
-                        "No se encontró /view/login-view.fxml"
+                        "No se encontró login-view.fxml"
                 );
             }
 
-            FXMLLoader loader = new FXMLLoader(url);
+            FXMLLoader loader =
+                    new FXMLLoader(url);
 
-            Parent root = loader.load();
+            Parent root =
+                    loader.load();
 
-            Stage stage = (Stage)
-                    ((Node) event.getSource())
+            Stage stage =
+                    (Stage) ((Node)
+                            event.getSource())
                             .getScene()
                             .getWindow();
 
-            Scene scene = new Scene(root);
+            stage.setScene(
+                    new Scene(root)
+            );
 
-            stage.setScene(scene);
+            stage.setTitle(
+                    "Sistema de Préstamos - Inicio de sesión"
+            );
+
             stage.show();
 
         } catch (IOException e) {
 
-            e.printStackTrace();
-
-            mostrarMensaje(
+            mostrarError(
                     "No se pudo abrir el inicio de sesión."
             );
+
+            e.printStackTrace();
         }
     }
 
-    /**
-     * Limpiar formulario.
-     */
     private void limpiarCampos() {
 
         txtNombre.clear();
@@ -236,11 +161,35 @@ public class RegisterController implements javafx.fxml.Initializable {
         txtPassword.clear();
     }
 
-    /**
-     * Mostrar mensaje al usuario.
-     */
-    private void mostrarMensaje(String mensaje) {
+    private void limpiarMensaje() {
 
-        lblMensaje.setText(mensaje);
+        lblMensaje.setText("");
+        lblMensaje.setStyle("");
+    }
+
+    private void mostrarError(
+            String mensaje
+    ) {
+
+        lblMensaje.setStyle(
+                "-fx-text-fill: red;"
+        );
+
+        lblMensaje.setText(
+                mensaje
+        );
+    }
+
+    private void mostrarExito(
+            String mensaje
+    ) {
+
+        lblMensaje.setStyle(
+                "-fx-text-fill: green;"
+        );
+
+        lblMensaje.setText(
+                mensaje
+        );
     }
 }
