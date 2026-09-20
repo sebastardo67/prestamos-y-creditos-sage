@@ -12,9 +12,6 @@ import main.java.org.sage.prestamos.creditos.model.Usuarios;
 
 public class UsuariosRepository {
 
-    /**
-     * Busca un usuario por correo electrónico.
-     */
     public Optional<Usuarios> buscarPorEmail(String email) {
 
         String sql = """
@@ -31,14 +28,12 @@ public class UsuariosRepository {
                     fecha_actualizacion
                 FROM usuarios
                 WHERE email = ?
+                LIMIT 1
                 """;
 
         try (
-            Connection connection =
-                    ConnectionDb.getconnectionDataBase();
-
-            PreparedStatement statement =
-                    connection.prepareStatement(sql)
+                Connection connection = ConnectionDb.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
         ) {
 
             statement.setString(1, email);
@@ -46,75 +41,21 @@ public class UsuariosRepository {
             try (ResultSet rs = statement.executeQuery()) {
 
                 if (rs.next()) {
-
-                    Usuarios usuario = new Usuarios();
-
-                    usuario.setIdUsuario(
-                            rs.getInt("id_usuario")
-                    );
-
-                    usuario.setNombre(
-                            rs.getString("nombre")
-                    );
-
-                    usuario.setApellido(
-                            rs.getString("apellido")
-                    );
-
-                    usuario.setUsername(
-                            rs.getString("username")
-                    );
-
-                    usuario.setEmail(
-                            rs.getString("email")
-                    );
-
-                    usuario.setPasswordHash(
-                            rs.getString("password_hash")
-                    );
-
-                    usuario.setIdRol(
-                            rs.getInt("id_rol")
-                    );
-
-                    usuario.setActivo(
-                            rs.getBoolean("activo")
-                    );
-
-                    Timestamp fechaCreacion =
-                            rs.getTimestamp("fecha_creacion");
-
-                    if (fechaCreacion != null) {
-                        usuario.setFechaCreacion(
-                                fechaCreacion.toLocalDateTime()
-                        );
-                    }
-
-                    Timestamp fechaActualizacion =
-                            rs.getTimestamp("fecha_actualizacion");
-
-                    if (fechaActualizacion != null) {
-                        usuario.setFechaActualizacion(
-                                fechaActualizacion.toLocalDateTime()
-                        );
-                    }
-
-                    return Optional.of(usuario);
+                    return Optional.of(mapearUsuario(rs));
                 }
             }
 
         } catch (SQLException e) {
 
-            e.printStackTrace();
+            throw new IllegalStateException(
+                    "No se pudo consultar el usuario en la base de datos.",
+                    e
+            );
         }
 
         return Optional.empty();
     }
 
-
-    /**
-     * Busca un usuario por username.
-     */
     public Optional<Usuarios> buscarPorUsername(String username) {
 
         String sql = """
@@ -131,14 +72,12 @@ public class UsuariosRepository {
                     fecha_actualizacion
                 FROM usuarios
                 WHERE username = ?
+                LIMIT 1
                 """;
 
         try (
-            Connection connection =
-                    ConnectionDb.getconnectionDataBase();
-
-            PreparedStatement statement =
-                    connection.prepareStatement(sql)
+                Connection connection = ConnectionDb.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
         ) {
 
             statement.setString(1, username);
@@ -146,75 +85,21 @@ public class UsuariosRepository {
             try (ResultSet rs = statement.executeQuery()) {
 
                 if (rs.next()) {
-
-                    Usuarios usuario = new Usuarios();
-
-                    usuario.setIdUsuario(
-                            rs.getInt("id_usuario")
-                    );
-
-                    usuario.setNombre(
-                            rs.getString("nombre")
-                    );
-
-                    usuario.setApellido(
-                            rs.getString("apellido")
-                    );
-
-                    usuario.setUsername(
-                            rs.getString("username")
-                    );
-
-                    usuario.setEmail(
-                            rs.getString("email")
-                    );
-
-                    usuario.setPasswordHash(
-                            rs.getString("password_hash")
-                    );
-
-                    usuario.setIdRol(
-                            rs.getInt("id_rol")
-                    );
-
-                    usuario.setActivo(
-                            rs.getBoolean("activo")
-                    );
-
-                    Timestamp fechaCreacion =
-                            rs.getTimestamp("fecha_creacion");
-
-                    if (fechaCreacion != null) {
-                        usuario.setFechaCreacion(
-                                fechaCreacion.toLocalDateTime()
-                        );
-                    }
-
-                    Timestamp fechaActualizacion =
-                            rs.getTimestamp("fecha_actualizacion");
-
-                    if (fechaActualizacion != null) {
-                        usuario.setFechaActualizacion(
-                                fechaActualizacion.toLocalDateTime()
-                        );
-                    }
-
-                    return Optional.of(usuario);
+                    return Optional.of(mapearUsuario(rs));
                 }
             }
 
         } catch (SQLException e) {
 
-            e.printStackTrace();
+            throw new IllegalStateException(
+                    "No se pudo consultar el nombre de usuario.",
+                    e
+            );
         }
 
         return Optional.empty();
     }
 
-
-    /**
-     * Guarda un nuevo usuario en la base de datos.
-     */
     public boolean guardar(Usuarios usuario) {
 
         String sql = """
@@ -233,69 +118,95 @@ public class UsuariosRepository {
                 """;
 
         try (
-            Connection connection =
-                    ConnectionDb.getconnectionDataBase();
-
-            PreparedStatement statement =
-                    connection.prepareStatement(sql)
+                Connection connection = ConnectionDb.getConnection();
+                PreparedStatement statement = connection.prepareStatement(sql)
         ) {
 
-            statement.setString(
-                    1,
-                    usuario.getNombre()
-            );
-
-            statement.setString(
-                    2,
-                    usuario.getApellido()
-            );
-
-            statement.setString(
-                    3,
-                    usuario.getUsername()
-            );
-
-            statement.setString(
-                    4,
-                    usuario.getEmail()
-            );
-
-            statement.setString(
-                    5,
-                    usuario.getPasswordHash()
-            );
-
-            statement.setInt(
-                    6,
-                    usuario.getIdRol()
-            );
-
-            statement.setBoolean(
-                    7,
-                    usuario.isActivo()
-            );
+            statement.setString(1, usuario.getNombre());
+            statement.setString(2, usuario.getApellido());
+            statement.setString(3, usuario.getUsername());
+            statement.setString(4, usuario.getEmail());
+            statement.setString(5, usuario.getPasswordHash());
+            statement.setInt(6, usuario.getIdRol());
+            statement.setBoolean(7, usuario.isActivo());
 
             statement.setTimestamp(
                     8,
-                    Timestamp.valueOf(
-                            usuario.getFechaCreacion()
-                    )
+                    Timestamp.valueOf(usuario.getFechaCreacion())
             );
 
             statement.setTimestamp(
                     9,
-                    Timestamp.valueOf(
-                            usuario.getFechaActualizacion()
-                    )
+                    Timestamp.valueOf(usuario.getFechaActualizacion())
             );
 
             return statement.executeUpdate() > 0;
 
         } catch (SQLException e) {
 
-            e.printStackTrace();
-
-            return false;
+            throw new IllegalStateException(
+                    "No se pudo guardar el usuario en la base de datos.",
+                    e
+            );
         }
+    }
+
+    private Usuarios mapearUsuario(ResultSet rs) throws SQLException {
+
+        Usuarios usuario = new Usuarios();
+
+        usuario.setIdUsuario(
+                rs.getInt("id_usuario")
+        );
+
+        usuario.setNombre(
+                rs.getString("nombre")
+        );
+
+        usuario.setApellido(
+                rs.getString("apellido")
+        );
+
+        usuario.setUsername(
+                rs.getString("username")
+        );
+
+        usuario.setEmail(
+                rs.getString("email")
+        );
+
+        usuario.setPasswordHash(
+                rs.getString("password_hash")
+        );
+
+        usuario.setIdRol(
+                rs.getInt("id_rol")
+        );
+
+        usuario.setActivo(
+                rs.getBoolean("activo")
+        );
+
+        Timestamp fechaCreacion =
+                rs.getTimestamp("fecha_creacion");
+
+        if (fechaCreacion != null) {
+
+            usuario.setFechaCreacion(
+                    fechaCreacion.toLocalDateTime()
+            );
+        }
+
+        Timestamp fechaActualizacion =
+                rs.getTimestamp("fecha_actualizacion");
+
+        if (fechaActualizacion != null) {
+
+            usuario.setFechaActualizacion(
+                    fechaActualizacion.toLocalDateTime()
+            );
+        }
+
+        return usuario;
     }
 }
