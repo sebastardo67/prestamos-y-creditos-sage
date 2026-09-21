@@ -10,5 +10,5 @@ public class CredentialsDb {
 
     public static final String USER_DB = "root";
 
-    public static final String PASS_DB = "Panchoderoket12";
+    public static final String PASS_DB = "Andres280709.";
 }
