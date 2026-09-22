@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import main.java.org.sage.prestamos.creditos.config.ConnectionDb;
@@ -209,4 +211,152 @@ public class UsuariosRepository {
 
         return usuario;
     }
+    public Optional<Usuarios> buscarPorId(int idUsuario) {
+
+    String sql = """
+            SELECT
+                id_usuario,
+                nombre,
+                apellido,
+                username,
+                email,
+                password_hash,
+                id_rol,
+                activo,
+                fecha_creacion,
+                fecha_actualizacion
+            FROM usuarios
+            WHERE id_usuario = ?
+            LIMIT 1
+            """;
+
+    try (
+            Connection connection =
+                    ConnectionDb.getConnection();
+
+            PreparedStatement statement =
+                    connection.prepareStatement(sql)
+    ) {
+
+        statement.setInt(
+                1,
+                idUsuario
+        );
+
+        try (ResultSet rs =
+                statement.executeQuery()) {
+
+            if (rs.next()) {
+                return Optional.of(
+                        mapearUsuario(rs)
+                );
+            }
+        }
+
+    } catch (SQLException e) {
+
+        throw new IllegalStateException(
+                "No se pudo consultar el usuario.",
+                e
+        );
+    }
+
+    return Optional.empty();
+}
+
+
+public List<Usuarios> listarClientes() {
+
+    List<Usuarios> usuarios =
+            new ArrayList<>();
+
+    String sql = """
+            SELECT
+                id_usuario,
+                nombre,
+                apellido,
+                username,
+                email,
+                password_hash,
+                id_rol,
+                activo,
+                fecha_creacion,
+                fecha_actualizacion
+            FROM usuarios
+            WHERE id_rol = 2
+            ORDER BY nombre, apellido
+            """;
+
+    try (
+            Connection connection =
+                    ConnectionDb.getConnection();
+
+            PreparedStatement statement =
+                    connection.prepareStatement(sql);
+
+            ResultSet rs =
+                    statement.executeQuery()
+    ) {
+
+        while (rs.next()) {
+
+            usuarios.add(
+                    mapearUsuario(rs)
+            );
+        }
+
+    } catch (SQLException e) {
+
+        throw new IllegalStateException(
+                "No se pudieron consultar los clientes.",
+                e
+        );
+    }
+
+    return usuarios;
+}
+
+
+public boolean actualizarEstadoCliente(
+        int idUsuario,
+        boolean activo
+) {
+
+    String sql = """
+            UPDATE usuarios
+            SET
+                activo = ?,
+                fecha_actualizacion = CURRENT_TIMESTAMP
+            WHERE id_usuario = ?
+              AND id_rol = 2
+            """;
+
+    try (
+            Connection connection =
+                    ConnectionDb.getConnection();
+
+            PreparedStatement statement =
+                    connection.prepareStatement(sql)
+    ) {
+
+        statement.setBoolean(
+                1,
+                activo
+        );
+
+        statement.setInt(
+                2,
+                idUsuario
+        );
+
+        return statement.executeUpdate() == 1;
+
+    } catch (SQLException e) {
+
+        throw new IllegalStateException(
+                "No se pudo cambiar el estado del usuario.",
+                e
+        );
+    }
+}
 }

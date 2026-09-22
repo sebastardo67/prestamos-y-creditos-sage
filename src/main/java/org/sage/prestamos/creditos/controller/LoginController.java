@@ -143,30 +143,51 @@ public class LoginController
         }
     }
 
-    private void abrirDashboard(
-            ActionEvent event,
-            UsuarioResponse usuario
-    ) {
+private void abrirDashboard(
+        ActionEvent event,
+        UsuarioResponse usuario
+) {
 
-        try {
+    try {
 
-            URL url =
-                    getClass().getResource(
-                            "/resources/view/dashboard-view.fxml"
-                    );
+        boolean administrador =
+                usuario.getIdRol() == 1;
 
-            if (url == null) {
+        String vista =
+                administrador
+                ? "/resources/view/admin-dashboard-view.fxml"
+                : "/resources/view/dashboard-view.fxml";
 
-                throw new IOException(
-                        "No se encontró dashboard-view.fxml"
+        URL url =
+                getClass().getResource(
+                        vista
                 );
-            }
 
-            FXMLLoader loader =
-                    new FXMLLoader(url);
+        if (url == null) {
 
-            Parent root =
-                    loader.load();
+            throw new IOException(
+                    "No se encontró la vista: "
+                    + vista
+            );
+        }
+
+        FXMLLoader loader =
+                new FXMLLoader(url);
+
+        Parent root =
+                loader.load();
+
+
+        if (administrador) {
+
+            AdminDashboardController controller =
+                    loader.getController();
+
+            controller.setUsuario(
+                    usuario
+            );
+
+        } else {
 
             DashboardController controller =
                     loader.getController();
@@ -174,39 +195,58 @@ public class LoginController
             controller.setUsuario(
                     usuario
             );
+        }
 
-            Stage stage =
-                    (Stage) ((Node)
-                            event.getSource())
-                            .getScene()
-                            .getWindow();
 
-            stage.setScene(
-                    new Scene(root)
+        Stage stage =
+                (Stage) ((Node)
+                        event.getSource())
+                        .getScene()
+                        .getWindow();
+
+        stage.setScene(
+                new Scene(root)
+        );
+
+        stage.setResizable(true);
+
+        if (administrador) {
+
+            stage.setTitle(
+                    "SAGE - Administración"
             );
-            
-            stage.setResizable(true);
-stage.setMinWidth(1000);stage.setMinHeight(650);
-stage.setWidth(1200);stage.setHeight(760);
-stage.centerOnScreen();
-            
-            
+
+            stage.setMinWidth(1100);
+            stage.setMinHeight(650);
+
+            stage.setWidth(1280);
+            stage.setHeight(760);
+
+        } else {
 
             stage.setTitle(
                     "Sistema de Préstamos"
             );
 
-            stage.show();
+            stage.setMinWidth(1000);
+            stage.setMinHeight(650);
 
-        } catch (IOException e) {
-
-            mostrarError(
-                    "El usuario inició sesión, pero no se pudo abrir la pantalla principal."
-            );
-
-            e.printStackTrace();
+            stage.setWidth(1200);
+            stage.setHeight(760);
         }
+
+        stage.centerOnScreen();
+        stage.show();
+
+    } catch (IOException e) {
+
+        mostrarError(
+                "El usuario inició sesión, pero no se pudo abrir el dashboard."
+        );
+
+        e.printStackTrace();
     }
+}
 
     private void mostrarError(
             String mensaje

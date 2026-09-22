@@ -5,7 +5,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
- 
+import java.sql.Timestamp;
+import main.java.org.sage.prestamos.creditos.dto.response.PrestamoAdminResponse;
 import java.util.ArrayList;
 import java.util.List;
  
@@ -165,4 +166,220 @@ public class PrestamosRepository {
  
         return prestamos;
     }
+    
+    public List<PrestamoAdminResponse> listarTodosConUsuario(
+        String filtroEstado
+) {
+
+    List<PrestamoAdminResponse> solicitudes =
+            new ArrayList<>();
+
+    boolean filtrar =
+            filtroEstado != null
+            && !filtroEstado.isBlank()
+            && !filtroEstado.equalsIgnoreCase("TODOS");
+
+    String sql = """
+            SELECT
+                p.id_prestamo,
+                p.id_usuario,
+
+                u.nombre,
+                u.apellido,
+                u.email,
+
+                p.telefono,
+                p.tipo_prestamo,
+                p.ingreso_mensual,
+                p.monto,
+                p.fecha,
+                p.plazo_meses,
+                p.tasa_interes,
+                p.cuota_mensual,
+                p.estado,
+                p.motivo,
+                p.comentario_admin,
+                p.fecha_resolucion
+
+            FROM prestamos p
+
+            INNER JOIN usuarios u
+                ON u.id_usuario = p.id_usuario
+            """
+            + (filtrar
+                    ? " WHERE p.estado = ? "
+                    : "")
+            + """
+            ORDER BY
+                p.fecha DESC,
+                p.id_prestamo DESC
+            """;
+
+    try (
+            Connection connection =
+                    ConnectionDb.getConnection();
+
+            PreparedStatement statement =
+                    connection.prepareStatement(sql)
+    ) {
+
+        if (filtrar) {
+
+            statement.setString(
+                    1,
+                    filtroEstado.toUpperCase()
+            );
+        }
+
+        try (ResultSet rs =
+                statement.executeQuery()) {
+
+            while (rs.next()) {
+
+                Timestamp resolucion =
+                        rs.getTimestamp(
+                                "fecha_resolucion"
+                        );
+
+                PrestamoAdminResponse response =
+                        new PrestamoAdminResponse(
+
+                                rs.getInt(
+                                        "id_prestamo"
+                                ),
+
+                                rs.getInt(
+                                        "id_usuario"
+                                ),
+
+                                rs.getString("nombre")
+                                + " "
+                                + rs.getString("apellido"),
+
+                                rs.getString(
+                                        "email"
+                                ),
+
+                                rs.getString(
+                                        "telefono"
+                                ),
+
+                                rs.getString(
+                                        "tipo_prestamo"
+                                ),
+
+                                rs.getBigDecimal(
+                                        "ingreso_mensual"
+                                ),
+
+                                rs.getBigDecimal(
+                                        "monto"
+                                ),
+
+                                rs.getDate(
+                                        "fecha"
+                                ).toLocalDate(),
+
+                                rs.getInt(
+                                        "plazo_meses"
+                                ),
+
+                                rs.getBigDecimal(
+                                        "tasa_interes"
+                                ),
+
+                                rs.getBigDecimal(
+                                        "cuota_mensual"
+                                ),
+
+                                rs.getString(
+                                        "estado"
+                                ),
+
+                                rs.getString(
+                                        "motivo"
+                                ),
+
+                                rs.getString(
+                                        "comentario_admin"
+                                ),
+
+                                resolucion == null
+                                ? null
+                                : resolucion
+                                        .toLocalDateTime()
+                        );
+
+                solicitudes.add(response);
+            }
+        }
+
+    } catch (SQLException e) {
+
+        throw new IllegalStateException(
+                "No se pudieron consultar las solicitudes.",
+                e
+        );
+    }
+
+    return solicitudes;
+}
+
+
+public boolean resolverPrestamo(
+        int idPrestamo,
+        int idAdministrador,
+        String nuevoEstado,
+        String comentario
+) {
+
+    String sql = """
+            UPDATE prestamos
+            SET
+                estado = ?,
+                id_admin_resolucion = ?,
+                fecha_resolucion = CURRENT_TIMESTAMP,
+                comentario_admin = ?
+            WHERE id_prestamo = ?
+              AND estado = 'PENDIENTE'
+            """;
+
+    try (
+            Connection connection =
+                    ConnectionDb.getConnection();
+
+            PreparedStatement statement =
+                    connection.prepareStatement(sql)
+    ) {
+
+        statement.setString(
+                1,
+                nuevoEstado
+        );
+
+        statement.setInt(
+                2,
+                idAdministrador
+        );
+
+        statement.setString(
+                3,
+                comentario
+        );
+
+        statement.setInt(
+                4,
+                idPrestamo
+        );
+
+        return statement.executeUpdate() == 1;
+
+    } catch (SQLException e) {
+
+        throw new IllegalStateException(
+                "No se pudo actualizar el préstamo.",
+                e
+        );
+    }
+}
 }

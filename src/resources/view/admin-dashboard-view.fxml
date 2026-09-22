@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane
+        prefHeight="760.0"
+        prefWidth="1280.0"
+        styleClass="admin-root"
+        xmlns="http://javafx.com/javafx/21"
+        xmlns:fx="http://javafx.com/fxml/1"
+        fx:controller="main.java.org.sage.prestamos.creditos.controller.AdminDashboardController">
+
+    <stylesheets>
+        <URL value="@../css/admin-dashboard.css"/>
+    </stylesheets>
+
+
+    <top>
+
+        <HBox
+                alignment="CENTER_LEFT"
+                spacing="20"
+                styleClass="top-bar">
+
+            <Label
+                    styleClass="brand-title"
+                    text="SAGE Administración"/>
+
+            <Region HBox.hgrow="ALWAYS"/>
+
+            <MenuButton
+                    fx:id="btnAdmin"
+                    styleClass="user-menu"
+                    text="Administrador">
+
+                <items>
+
+                    <MenuItem
+                            onAction="#handleCerrarSesion"
+                            text="Cerrar sesión"/>
+
+                </items>
+
+            </MenuButton>
+
+        </HBox>
+
+    </top>
+
+
+    <left>
+
+        <VBox
+                prefWidth="225"
+                spacing="10"
+                styleClass="sidebar">
+
+            <Label
+                    styleClass="menu-title"
+                    text="ADMINISTRACIÓN"/>
+
+            <Button
+                    onAction="#handleResumen"
+                    prefWidth="195"
+                    styleClass="sidebar-button"
+                    text="Resumen"/>
+
+            <Button
+                    onAction="#handleSolicitudes"
+                    prefWidth="195"
+                    styleClass="sidebar-button"
+                    text="Solicitudes"/>
+
+            <Button
+                    onAction="#handleClientes"
+                    prefWidth="195"
+                    styleClass="sidebar-button"
+                    text="Clientes"/>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Label
+                    styleClass="sidebar-footer"
+                    text="SAGE Banking"/>
+
+        </VBox>
+
+    </left>
+
+
+    <center>
+
+        <StackPane styleClass="content-area">
+
+
+            <!-- ======================== -->
+            <!-- RESUMEN -->
+            <!-- ======================== -->
+
+            <VBox
+                    fx:id="resumenPane"
+                    spacing="22"
+                    styleClass="page">
+
+                <Label
+                        styleClass="page-title"
+                        text="Panel administrativo"/>
+
+                <Label
+                        styleClass="subtitle"
+                        text="Resumen general de préstamos y créditos."/>
+
+                <HBox spacing="18">
+
+                    <VBox
+                            styleClass="summary-card"
+                            HBox.hgrow="ALWAYS">
+
+                        <Label
+                                styleClass="summary-caption"
+                                text="Solicitudes"/>
+
+                        <Label
+                                fx:id="lblTotalSolicitudes"
+                                styleClass="summary-number"
+                                text="0"/>
+
+                    </VBox>
+
+
+                    <VBox
+                            styleClass="summary-card"
+                            HBox.hgrow="ALWAYS">
+
+                        <Label
+                                styleClass="summary-caption"
+                                text="Pendientes"/>
+
+                        <Label
+                                fx:id="lblPendientes"
+                                styleClass="summary-number"
+                                text="0"/>
+
+                    </VBox>
+
+
+                    <VBox
+                            styleClass="summary-card"
+                            HBox.hgrow="ALWAYS">
+
+                        <Label
+                                styleClass="summary-caption"
+                                text="Aprobados"/>
+
+                        <Label
+                                fx:id="lblAprobados"
+                                styleClass="summary-number"
+                                text="0"/>
+
+                    </VBox>
+
+
+                    <VBox
+                            styleClass="summary-card"
+                            HBox.hgrow="ALWAYS">
+
+                        <Label
+                                styleClass="summary-caption"
+                                text="Rechazados"/>
+
+                        <Label
+                                fx:id="lblRechazados"
+                                styleClass="summary-number"
+                                text="0"/>
+
+                    </VBox>
+
+                </HBox>
+
+
+                <VBox styleClass="amount-card">
+
+                    <Label
+                            styleClass="summary-caption"
+                            text="Capital total aprobado"/>
+
+                    <Label
+                            fx:id="lblMontoAprobado"
+                            styleClass="amount-value"
+                            text="Q 0.00"/>
+
+                </VBox>
+
+
+                <Button
+                        onAction="#handleSolicitudes"
+                        styleClass="primary-button"
+                        text="Revisar solicitudes pendientes"/>
+
+            </VBox>
+
+
+            <!-- ======================== -->
+            <!-- SOLICITUDES -->
+            <!-- ======================== -->
+
+            <VBox
+                    fx:id="solicitudesPane"
+                    managed="false"
+                    spacing="16"
+                    styleClass="page"
+                    visible="false">
+
+                <HBox
+                        alignment="CENTER_LEFT"
+                        spacing="15">
+
+                    <VBox>
+
+                        <Label
+                                styleClass="page-title"
+                                text="Solicitudes"/>
+
+                        <Label
+                                styleClass="subtitle"
+                                text="Gestiona solicitudes de préstamos."/>
+
+                    </VBox>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Label text="Estado:"/>
+
+                    <ComboBox
+                            fx:id="cmbEstado"
+                            prefWidth="150"/>
+
+                </HBox>
+
+
+                <SplitPane
+                        dividerPositions="0.64"
+                        VBox.vgrow="ALWAYS">
+
+                    <items>
+
+                        <TableView
+                                fx:id="tblSolicitudes">
+
+                            <columns>
+
+                                <TableColumn
+                                        fx:id="colIdPrestamo"
+                                        prefWidth="65"
+                                        text="ID"/>
+
+                                <TableColumn
+                                        fx:id="colCliente"
+                                        prefWidth="180"
+                                        text="Cliente"/>
+
+                                <TableColumn
+                                        fx:id="colTipo"
+                                        prefWidth="170"
+                                        text="Producto"/>
+
+                                <TableColumn
+                                        fx:id="colMonto"
+                                        prefWidth="120"
+                                        text="Monto"/>
+
+                                <TableColumn
+                                        fx:id="colEstado"
+                                        prefWidth="105"
+                                        text="Estado"/>
+
+                                <TableColumn
+                                        fx:id="colFecha"
+                                        prefWidth="110"
+                                        text="Fecha"/>
+
+                            </columns>
+
+                        </TableView>
+
+
+                        <VBox
+                                spacing="8"
+                                styleClass="detail-card">
+
+                            <Label
+                                    styleClass="card-title"
+                                    text="Detalle de solicitud"/>
+
+                            <Label
+                                    styleClass="detail-caption"
+                                    text="Cliente"/>
+
+                            <Label
+                                    fx:id="lblDetalleCliente"
+                                    text="-"/>
+
+                            <Label
+                                    styleClass="detail-caption"
+                                    text="Correo"/>
+
+                            <Label
+                                    fx:id="lblDetalleEmail"
+                                    text="-"/>
+
+                            <Label
+                                    styleClass="detail-caption"
+                                    text="Teléfono"/>
+
+                            <Label
+                                    fx:id="lblDetalleTelefono"
+                                    text="-"/>
+
+                            <Label
+                                    styleClass="detail-caption"
+                                    text="Ingreso mensual"/>
+
+                            <Label
+                                    fx:id="lblDetalleIngreso"
+                                    text="-"/>
+
+                            <Label
+                                    styleClass="detail-caption"
+                                    text="Monto solicitado"/>
+
+                            <Label
+                                    fx:id="lblDetalleMonto"
+                                    text="-"/>
+
+                            <Label
+                                    styleClass="detail-caption"
+                                    text="Plazo"/>
+
+                            <Label
+                                    fx:id="lblDetallePlazo"
+                                    text="-"/>
+
+                            <Label
+                                    styleClass="detail-caption"
+                                    text="Tasa"/>
+
+                            <Label
+                                    fx:id="lblDetalleTasa"
+                                    text="-"/>
+
+                            <Label
+                                    styleClass="detail-caption"
+                                    text="Cuota mensual"/>
+
+                            <Label
+                                    fx:id="lblDetalleCuota"
+                                    text="-"/>
+
+                            <Label
+                                    styleClass="detail-caption"
+                                    text="Motivo"/>
+
+                            <Label
+                                    fx:id="lblDetalleMotivo"
+                                    wrapText="true"
+                                    text="-"/>
+
+                            <Label
+                                    styleClass="detail-caption"
+                                    text="Estado"/>
+
+                            <Label
+                                    fx:id="lblDetalleEstado"
+                                    text="-"/>
+
+                            <Label
+                                    styleClass="detail-caption"
+                                    text="Comentario administrativo"/>
+
+                            <Label
+                                    fx:id="lblDetalleComentario"
+                                    wrapText="true"
+                                    text="-"/>
+
+                            <Region VBox.vgrow="ALWAYS"/>
+
+                            <HBox spacing="10">
+
+                                <Button
+                                        fx:id="btnAprobar"
+                                        disable="true"
+                                        onAction="#handleAprobar"
+                                        styleClass="approve-button"
+                                        text="Aprobar"/>
+
+                                <Button
+                                        fx:id="btnRechazar"
+                                        disable="true"
+                                        onAction="#handleRechazar"
+                                        styleClass="reject-button"
+                                        text="Rechazar"/>
+
+                            </HBox>
+
+                        </VBox>
+
+                    </items>
+
+                </SplitPane>
+
+            </VBox>
+
+
+            <!-- ======================== -->
+            <!-- CLIENTES -->
+            <!-- ======================== -->
+
+            <VBox
+                    fx:id="clientesPane"
+                    managed="false"
+                    spacing="18"
+                    styleClass="page"
+                    visible="false">
+
+                <Label
+                        styleClass="page-title"
+                        text="Clientes"/>
+
+                <Label
+                        styleClass="subtitle"
+                        text="Consulta y administra las cuentas de los clientes."/>
+
+                <TableView
+                        fx:id="tblClientes"
+                        VBox.vgrow="ALWAYS">
+
+                    <columns>
+
+                        <TableColumn
+                                fx:id="colClienteId"
+                                prefWidth="70"
+                                text="ID"/>
+
+                        <TableColumn
+                                fx:id="colClienteNombre"
+                                prefWidth="220"
+                                text="Nombre"/>
+
+                        <TableColumn
+                                fx:id="colClienteUsername"
+                                prefWidth="180"
+                                text="Usuario"/>
+
+                        <TableColumn
+                                fx:id="colClienteEmail"
+                                prefWidth="270"
+                                text="Correo"/>
+
+                        <TableColumn
+                                fx:id="colClienteActivo"
+                                prefWidth="120"
+                                text="Estado"/>
+
+                    </columns>
+
+                </TableView>
+
+                <Button
+                        fx:id="btnCambiarEstadoCliente"
+                        disable="true"
+                        onAction="#handleCambiarEstadoCliente"
+                        styleClass="secondary-button"
+                        text="Cambiar estado"/>
+
+            </VBox>
+
+        </StackPane>
+
+    </center>
+
+</BorderPane>
