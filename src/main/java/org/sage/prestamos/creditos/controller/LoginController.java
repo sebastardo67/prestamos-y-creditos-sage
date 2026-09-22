@@ -184,6 +184,13 @@ public class LoginController
             stage.setScene(
                     new Scene(root)
             );
+            
+            stage.setResizable(true);
+stage.setMinWidth(1000);stage.setMinHeight(650);
+stage.setWidth(1200);stage.setHeight(760);
+stage.centerOnScreen();
+            
+            
 
             stage.setTitle(
                     "Sistema de Préstamos"
