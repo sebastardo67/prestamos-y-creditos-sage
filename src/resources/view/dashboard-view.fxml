@@ -1,56 +1,608 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
+ 
+<?import java.net.URL?>
+ 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+ 
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
-
-<AnchorPane
-        prefHeight="400.0"
-        prefWidth="600.0"
-        xmlns="http://javafx.com/javafx/21.0.1"
+ 
+<BorderPane
+        prefHeight="720.0"
+        prefWidth="1200.0"
+        styleClass="dashboard-root"
+        xmlns="http://javafx.com/javafx/21"
         xmlns:fx="http://javafx.com/fxml/1"
         fx:controller="main.java.org.sage.prestamos.creditos.controller.DashboardController">
+ 
+    <stylesheets>
+<URL value="@../css/dashboard-view.css"/>
+</stylesheets>
+ 
 
-    <children>
-
-        <VBox
-                alignment="CENTER"
-                layoutX="125.0"
-                layoutY="80.0"
-                prefHeight="240.0"
-                prefWidth="350.0"
-                spacing="15.0">
-
-            <children>
-
-                <Label
-                        fx:id="lblBienvenida"
-                        style="-fx-font-size: 22px; -fx-font-weight: bold;"
-                        text="Bienvenido"/>
-
-                <Label
-                        fx:id="lblUsername"
-                        text="Usuario:"/>
-
-                <Label
-                        fx:id="lblEmail"
-                        text="Correo:"/>
-
-                <Label
-                        fx:id="lblRol"
-                        text="Rol:"/>
-
+ 
+    <top>
+ 
+        <HBox
+                alignment="CENTER_LEFT"
+                spacing="20.0"
+                styleClass="top-bar">
+ 
+            <Label
+                    styleClass="brand-title"
+                    text="SAGE Créditos"/>
+ 
+            <Region HBox.hgrow="ALWAYS"/>
+ 
+            <VBox
+                    alignment="CENTER_RIGHT"
+                    spacing="6.0">
+ 
+                <MenuButton
+                        fx:id="btnUsuario"
+                        styleClass="user-menu"
+                        text="Usuario">
+ 
+                    <items>
+ 
+                        <MenuItem
+                                onAction="#handleCerrarSesion"
+                                text="Cerrar sesión"/>
+ 
+                    </items>
+ 
+                </MenuButton>
+ 
                 <Button
-                        mnemonicParsing="false"
-                        onAction="#handleCerrarSesion"
-                        prefWidth="150.0"
-                        text="Cerrar sesión"/>
+                        onAction="#handleMisPrestamos"
+                        styleClass="my-loans-button"
+                        text="Mis préstamos"/>
+ 
+            </VBox>
+ 
+        </HBox>
+ 
+    </top>
+ 
 
-            </children>
-
+    <left>
+ 
+        <VBox
+                prefWidth="220.0"
+                spacing="10.0"
+                styleClass="sidebar">
+ 
+            <Label
+                    styleClass="sidebar-caption"
+                    text="MENÚ"/>
+ 
+            <Button
+                    onAction="#handleInicio"
+                    prefWidth="190.0"
+                    styleClass="sidebar-button"
+                    text="Inicio"/>
+ 
+            <Button
+                    onAction="#handleCatalogo"
+                    prefWidth="190.0"
+                    styleClass="sidebar-button"
+                    text="Catálogo de préstamos"/>
+ 
+            <Region VBox.vgrow="ALWAYS"/>
+ 
+            <Label
+                    styleClass="sidebar-footer"
+                    text="SAGE Banking"/>
+ 
         </VBox>
+ 
+    </left>
+ 
 
-    </children>
+    <center>
+ 
+        <StackPane styleClass="content-stack">
 
-</AnchorPane>
+            <ScrollPane
+                    fx:id="inicioPane"
+                    fitToWidth="true"
+                    hbarPolicy="NEVER">
+ 
+                <content>
+ 
+                    <VBox
+                            spacing="20.0"
+                            styleClass="page">
+ 
+                        <Label
+                                fx:id="lblBienvenida"
+                                styleClass="page-title"
+                                text="Bienvenido"/>
+ 
+                        <Label
+                                styleClass="page-subtitle"
+                                text="Esta es tu plataforma de préstamos y créditos."/>
+ 
+                        <HBox spacing="18.0">
+ 
+                            <VBox
+                                    spacing="8.0"
+                                    styleClass="info-card"
+                                    HBox.hgrow="ALWAYS">
+ 
+                                <Label
+                                        styleClass="card-title"
+                                        text="Información de la cuenta"/>
+ 
+                                <Label
+                                        styleClass="field-caption"
+                                        text="Nombre"/>
+ 
+                                <Label
+                                        fx:id="lblNombre"
+                                        styleClass="field-value"
+                                        text="-"/>
+ 
+                                <Label
+                                        styleClass="field-caption"
+                                        text="Usuario"/>
+ 
+                                <Label
+                                        fx:id="lblUsername"
+                                        styleClass="field-value"
+                                        text="-"/>
+ 
+                                <Label
+                                        styleClass="field-caption"
+                                        text="Correo electrónico"/>
+ 
+                                <Label
+                                        fx:id="lblEmail"
+                                        styleClass="field-value"
+                                        text="-"/>
+ 
+                                <Label
+                                        styleClass="field-caption"
+                                        text="Tipo de cuenta"/>
+ 
+                                <Label
+                                        fx:id="lblRol"
+                                        styleClass="field-value"
+                                        text="-"/>
+ 
+                            </VBox>
+ 
+                            <VBox
+                                    spacing="12.0"
+                                    styleClass="info-card"
+                                    HBox.hgrow="ALWAYS">
+ 
+                                <Label
+                                        styleClass="card-title"
+                                        text="¿Necesitas financiamiento?"/>
+ 
+                                <Label
+                                        wrapText="true"
+                                        text="Explora nuestro catálogo de productos y encuentra la opción que mejor se adapte a tus necesidades."/>
+ 
+                                <Button
+                                        onAction="#handleCatalogo"
+                                        styleClass="primary-action"
+                                        text="Ver préstamos disponibles"/>
+ 
+                            </VBox>
+ 
+                        </HBox>
+ 
+                    </VBox>
+ 
+                </content>
+ 
+            </ScrollPane>
+ 
+
+ 
+            <ScrollPane
+                    fx:id="catalogoPane"
+                    fitToWidth="true"
+                    hbarPolicy="NEVER"
+                    managed="false"
+                    visible="false">
+ 
+                <content>
+ 
+                    <VBox
+                            spacing="20.0"
+                            styleClass="page">
+ 
+                        <Label
+                                styleClass="page-title"
+                                text="Catálogo de préstamos"/>
+ 
+                        <Label
+                                styleClass="page-subtitle"
+                                text="Selecciona el producto que mejor se adapte a tus necesidades."/>
+ 
+                        <FlowPane
+                                hgap="18.0"
+                                vgap="18.0">
+ 
+                            <!-- PERSONAL -->
+ 
+                            <VBox
+                                    prefWidth="300.0"
+                                    spacing="10.0"
+                                    styleClass="loan-card">
+ 
+                                <Label
+                                        styleClass="loan-name"
+                                        text="Crédito Personal"/>
+ 
+                                <Label
+                                        wrapText="true"
+                                        text="Ideal para gastos personales, emergencias o proyectos de corto plazo."/>
+ 
+                                <Label
+                                        styleClass="loan-rate"
+                                        text="14.50% anual"/>
+ 
+                                <Label
+                                        text="Monto: Q1,000 - Q50,000"/>
+ 
+                                <Label
+                                        text="Plazo: 6 - 36 meses"/>
+ 
+                                <Button
+                                        onAction="#seleccionarPersonal"
+                                        styleClass="primary-action"
+                                        text="Solicitar"/>
+ 
+                            </VBox>
+ 
+                         
+ 
+                            <VBox
+                                    prefWidth="300.0"
+                                    spacing="10.0"
+                                    styleClass="loan-card">
+ 
+                                <Label
+                                        styleClass="loan-name"
+                                        text="Crédito Estudiantil"/>
+ 
+                                <Label
+                                        wrapText="true"
+                                        text="Financiamiento para estudios, matrícula, materiales y formación profesional."/>
+ 
+                                <Label
+                                        styleClass="loan-rate"
+                                        text="9.50% anual"/>
+ 
+                                <Label
+                                        text="Monto: Q1,000 - Q75,000"/>
+ 
+                                <Label
+                                        text="Plazo: 12 - 48 meses"/>
+ 
+                                <Button
+                                        onAction="#seleccionarEstudiantil"
+                                        styleClass="primary-action"
+                                        text="Solicitar"/>
+ 
+                            </VBox>
+ 
+                   
+ 
+                            <VBox
+                                    prefWidth="300.0"
+                                    spacing="10.0"
+                                    styleClass="loan-card">
+ 
+                                <Label
+                                        styleClass="loan-name"
+                                        text="Crédito Vehicular"/>
+ 
+                                <Label
+                                        wrapText="true"
+                                        text="Diseñado para financiar la compra de vehículo nuevo o usado."/>
+ 
+                                <Label
+                                        styleClass="loan-rate"
+                                        text="11.00% anual"/>
+ 
+                                <Label
+                                        text="Monto: Q5,000 - Q150,000"/>
+ 
+                                <Label
+                                        text="Plazo: 12 - 60 meses"/>
+ 
+                                <Button
+                                        onAction="#seleccionarVehicular"
+                                        styleClass="primary-action"
+                                        text="Solicitar"/>
+ 
+                            </VBox>
+ 
+                          
+ 
+                            <VBox
+                                    prefWidth="300.0"
+                                    spacing="10.0"
+                                    styleClass="loan-card">
+ 
+                                <Label
+                                        styleClass="loan-name"
+                                        text="Crédito Emprendedor"/>
+ 
+                                <Label
+                                        wrapText="true"
+                                        text="Capital para comenzar, ampliar o fortalecer un emprendimiento."/>
+ 
+                                <Label
+                                        styleClass="loan-rate"
+                                        text="13.00% anual"/>
+ 
+                                <Label
+                                        text="Monto: Q2,000 - Q100,000"/>
+ 
+                                <Label
+                                        text="Plazo: 6 - 48 meses"/>
+ 
+                                <Button
+                                        onAction="#seleccionarEmprendedor"
+                                        styleClass="primary-action"
+                                        text="Solicitar"/>
+ 
+                            </VBox>
+ 
+                        </FlowPane>
+ 
+                    </VBox>
+ 
+                </content>
+ 
+            </ScrollPane>
+ 
+ 
+
+            <ScrollPane
+                    fx:id="formularioPane"
+                    fitToWidth="true"
+                    hbarPolicy="NEVER"
+                    managed="false"
+                    visible="false">
+ 
+                <content>
+ 
+                    <VBox
+                            spacing="18.0"
+                            styleClass="page">
+ 
+                        <Label
+                                styleClass="page-title"
+                                text="Solicitud de préstamo"/>
+ 
+                        <VBox
+                                spacing="4.0"
+                                styleClass="selected-product">
+ 
+                            <Label
+                                    fx:id="lblProductoSeleccionado"
+                                    styleClass="loan-name"
+                                    text="Producto"/>
+ 
+                            <Label
+                                    fx:id="lblTasaProducto"
+                                    text="-"/>
+ 
+                            <Label
+                                    fx:id="lblRangoProducto"
+                                    text="-"/>
+ 
+                        </VBox>
+ 
+                        <GridPane
+                                hgap="18.0"
+                                vgap="12.0"
+                                styleClass="loan-form">
+ 
+                            <columnConstraints>
+ 
+                                <ColumnConstraints
+                                        minWidth="170.0"
+                                        prefWidth="190.0"/>
+ 
+                                <ColumnConstraints
+                                        hgrow="ALWAYS"/>
+ 
+                            </columnConstraints>
+ 
+ 
+                            <Label
+                                    text="Nombre"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="0"/>
+ 
+                            <TextField
+                                    fx:id="txtNombreSolicitud"
+                                    editable="false"
+                                    GridPane.columnIndex="1"
+                                    GridPane.rowIndex="0"/>
+ 
+ 
+                            <Label
+                                    text="Teléfono"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="1"/>
+ 
+                            <TextField
+                                    fx:id="txtTelefono"
+                                    promptText="Ej. 5555-5555"
+                                    GridPane.columnIndex="1"
+                                    GridPane.rowIndex="1"/>
+ 
+ 
+                            <Label
+                                    text="Ingreso mensual"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="2"/>
+ 
+                            <TextField
+                                    fx:id="txtIngresoMensual"
+                                    promptText="Ej. 6000.00"
+                                    GridPane.columnIndex="1"
+                                    GridPane.rowIndex="2"/>
+ 
+ 
+                            <Label
+                                    text="Monto solicitado"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="3"/>
+ 
+                            <TextField
+                                    fx:id="txtMonto"
+                                    promptText="Ej. 15000.00"
+                                    GridPane.columnIndex="1"
+                                    GridPane.rowIndex="3"/>
+ 
+ 
+                            <Label
+                                    text="Plazo en meses"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="4"/>
+ 
+                            <TextField
+                                    fx:id="txtPlazo"
+                                    promptText="Ej. 24"
+                                    GridPane.columnIndex="1"
+                                    GridPane.rowIndex="4"/>
+ 
+ 
+                            <Label
+                                    text="Motivo del préstamo"
+                                    GridPane.columnIndex="0"
+                                    GridPane.rowIndex="5"/>
+ 
+                            <TextArea
+                                    fx:id="txtMotivo"
+                                    prefRowCount="4"
+                                    promptText="Describe brevemente para qué utilizarás el préstamo."
+                                    wrapText="true"
+                                    GridPane.columnIndex="1"
+                                    GridPane.rowIndex="5"/>
+ 
+                        </GridPane>
+ 
+                        <Label
+                                fx:id="lblFormularioMensaje"
+                                wrapText="true"/>
+ 
+                        <HBox spacing="10.0">
+ 
+                            <Button
+                                    onAction="#volverCatalogo"
+                                    styleClass="secondary-action"
+                                    text="Volver"/>
+ 
+                            <Button
+                                    onAction="#handleEnviarSolicitud"
+                                    styleClass="primary-action"
+                                    text="Enviar solicitud"/>
+ 
+                        </HBox>
+ 
+                    </VBox>
+ 
+                </content>
+ 
+            </ScrollPane>
+ 
+ 
+            <VBox
+                    fx:id="misPrestamosPane"
+                    managed="false"
+                    spacing="18.0"
+                    styleClass="page"
+                    visible="false">
+ 
+                <Label
+                        styleClass="page-title"
+                        text="Mis préstamos"/>
+ 
+                <Label
+                        styleClass="page-subtitle"
+                        text="Consulta tus solicitudes y préstamos actuales."/>
+ 
+                <TableView
+                        fx:id="tblPrestamos"
+                        VBox.vgrow="ALWAYS">
+ 
+                    <columns>
+ 
+                        <TableColumn
+                                fx:id="colTipo"
+                                prefWidth="170.0"
+                                text="Tipo"/>
+ 
+                        <TableColumn
+                                fx:id="colMonto"
+                                prefWidth="120.0"
+                                text="Monto"/>
+ 
+                        <TableColumn
+                                fx:id="colPlazo"
+                                prefWidth="90.0"
+                                text="Meses"/>
+ 
+                        <TableColumn
+                                fx:id="colTasa"
+                                prefWidth="90.0"
+                                text="Tasa"/>
+ 
+                        <TableColumn
+                                fx:id="colCuota"
+                                prefWidth="130.0"
+                                text="Cuota mensual"/>
+ 
+                        <TableColumn
+                                fx:id="colEstado"
+                                prefWidth="110.0"
+                                text="Estado"/>
+ 
+                        <TableColumn
+                                fx:id="colFecha"
+                                prefWidth="120.0"
+                                text="Fecha"/>
+ 
+                    </columns>
+ 
+                </TableView>
+ 
+                <Label
+                        fx:id="lblSinPrestamos"
+                        managed="false"
+                        styleClass="empty-message"
+                        text="Todavía no tienes préstamos registrados."
+                        visible="false"/>
+ 
+            </VBox>
+ 
+        </StackPane>
+ 
+    </center>
+ 
+</BorderPane>

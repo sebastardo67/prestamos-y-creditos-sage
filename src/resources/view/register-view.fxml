@@ -12,103 +12,67 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="520.0"
-            prefWidth="600.0"
-            styleClass="mainFxmlClass"
-            xmlns="http://javafx.com/javafx/21.0.1"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="main.java.org.sage.prestamos.creditos.controller.RegisterController">
+<AnchorPane prefHeight="520.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.org.sage.prestamos.creditos.controller.RegisterController">
 
     <stylesheets>
-        <URL value="@../css/login-view.css"/>
+        <URL value="@../css/login-view.css" />
     </stylesheets>
 
     <children>
 
-        <Pane prefHeight="520.0"
-              prefWidth="600.0">
+        <Pane prefHeight="520.0" prefWidth="600.0">
 
             <children>
 
                 <!-- FORMULARIO -->
-<VBox layoutX="145.0"
-      layoutY="55.0"
-      prefWidth="310.0"
-      spacing="7.0"
-      styleClass="form-card">
+<VBox layoutX="145.0" layoutY="55.0" prefHeight="418.0" prefWidth="342.0" spacing="7.0" styleClass="form-card">
 
                     <children>
 
-                        <Label text="Nombre"/>
+                        <Label text="Nombre" />
 
-                        <TextField fx:id="txtNombre"
-                                   promptText="Manolo Sebastian"/>
+                        <TextField fx:id="txtNombre" promptText="Manolo Sebastian" />
 
-                        <Label text="Apellido"/>
+                        <Label text="Apellido" />
 
-                        <TextField fx:id="txtApellido"
-                                   promptText="Galvez Melgar"/>
+                        <TextField fx:id="txtApellido" promptText="Galvez Melgar" />
 
-                        <Label text="Usuario"/>
+                        <Label text="Usuario" />
 
-                        <TextField fx:id="txtUsername"
-                                   promptText="Ingresa tu usuario"/>
+                        <TextField fx:id="txtUsername" promptText="Ingresa tu usuario" />
 
-                        <Label text="Correo"/>
+                        <Label text="Correo" />
 
-                        <TextField fx:id="txtEmail"
-                                   promptText="ejemplo@correo.com"/>
+                        <TextField fx:id="txtEmail" promptText="ejemplo@correo.com" />
 
-                        <Label text="Contraseña"/>
+                        <Label text="Contraseña" />
 
-                        <PasswordField fx:id="txtPassword"
-                                       promptText="Ingresa tu contraseña"/>
+                        <PasswordField fx:id="txtPassword" promptText="Ingresa tu contraseña" />
 
-                        <Label fx:id="lblMensaje"
-                               textFill="RED"
-                               wrapText="true"/>
+                        <Label fx:id="lblMensaje" textFill="RED" wrapText="true" />
+      
+                      <!-- BOTONES -->
+                      <HBox alignment="CENTER" prefWidth="246.0" spacing="8.0">
+      
+                          <children>
+      
+      <Button mnemonicParsing="false" onAction="#handleLogin" prefHeight="34.0" prefWidth="139.0" styleClass="secondary-button" text="Tengo una cuenta" />
+      
+      <Button mnemonicParsing="false" onAction="#handleRegister" prefHeight="34.0" prefWidth="103.0" styleClass="primary-button" text="Registrarse" />
+      
+                          </children>
+      
+                      </HBox>
 
                     </children>
 
                 </VBox>
 
-                <!-- BOTONES -->
-                <HBox layoutX="177.0"
-                      layoutY="335.0"
-                      alignment="CENTER"
-                      prefWidth="246.0"
-                      spacing="8.0">
-
-                    <children>
-
-<Button mnemonicParsing="false"
-        onAction="#handleLogin"
-        prefHeight="35.0"
-        prefWidth="124.0"
-        styleClass="secondary-button"
-        text="Tengo una cuenta"/>
-
-<Button mnemonicParsing="false"
-        onAction="#handleRegister"
-        prefHeight="35.0"
-        prefWidth="118.0"
-        styleClass="primary-button"
-        text="Registrarse"/>
-
-                    </children>
-
-                </HBox>
-
                 <!-- LOGO -->
-                <ImageView fitHeight="80.0"
-                           fitWidth="95.0"
-                           layoutX="253.0"
-                           layoutY="0.0"
-                           pickOnBounds="true"
-                           preserveRatio="true">
+                <ImageView fitHeight="80.0" fitWidth="95.0" layoutX="253.0" layoutY="0.0" pickOnBounds="true" preserveRatio="true">
 
                     <image>
-                        <Image url="@../images/image-2.png"/>
+                        <Image url="@../images/image-2.png" />
                     </image>
 
                 </ImageView>
